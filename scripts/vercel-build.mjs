@@ -41,6 +41,38 @@ console.log(`→ PostgreSQL schema${direct ? " (migration-д шууд холбо
 
 run("npx prisma generate");
 
+// ── Migration эхлэхээс өмнөх оношилгоо ба түүхийн зөрүүг засах ──
+// Migration-ы түүхэнд "хэрэгжсэн" гэж бичигдсэн ч манай хүснэгтүүд байхгүй бол (жишээ нь өөр
+// schema-д үүссэн, эсвэл гаднаас устгагдсан) түүх худал байна. Хүснэгт байхгүй тул устах өгөгдөл
+// байхгүй — түүхийг цэвэрлээд бүх migration-ыг шинээр хэрэгжүүлнэ.
+{
+  const { PrismaClient } = await import("@prisma/client");
+  const db = new PrismaClient({ datasourceUrl: direct || url });
+  try {
+    const [info] = await db.$queryRawUnsafe(`
+      SELECT current_user AS "user", current_database() AS "database", current_schema() AS "schema",
+             current_setting('search_path') AS "searchPath",
+             to_regclass('public."User"')::text AS "userTable",
+             to_regclass('public._prisma_migrations')::text AS "migrationsTable",
+             (SELECT string_agg(DISTINCT table_schema, ', ') FROM information_schema.tables
+               WHERE table_name IN ('User', 'UploadedFile', 'Question')) AS "ourTablesIn"`);
+    console.log("\n→ Өгөгдлийн сангийн оношилгоо:", JSON.stringify(info));
+    if (!info.userTable && info.migrationsTable) {
+      const hist = await db.$queryRawUnsafe(`SELECT migration_name AS name, finished_at IS NOT NULL AS done FROM public._prisma_migrations ORDER BY started_at`);
+      if (hist.length) {
+        console.log(`⚠ Migration-ы түүх (${hist.map((h) => `${h.name}:${h.done ? "ok" : "failed"}`).join(", ")}) байгаа ч public."User" хүснэгт алга.`);
+        if (info.ourTablesIn) console.log(`  Манай хүснэгтүүд өөр schema-д байна: ${info.ourTablesIn}. Апп public schema-г ашигладаг тул public-д шинээр үүсгэнэ.`);
+        await db.$executeRawUnsafe(`DELETE FROM public._prisma_migrations`);
+        console.log("  Буруу түүхийг цэвэрлэлээ — migration-уудыг шинээр хэрэгжүүлнэ.");
+      }
+    }
+  } catch (e) {
+    console.log(`⚠ Оношилгоо хийж чадсангүй: ${e.message}`);
+  } finally {
+    await db.$disconnect();
+  }
+}
+
 let migrate = run("npx prisma migrate deploy", { capture: true, allowFail: true });
 
 // P3009: өмнөх deploy дээр migration дундаа унасан. Алдааны логийг хэвлээд "rolled back" гэж тэмдэглэн
