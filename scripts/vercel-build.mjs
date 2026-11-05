@@ -28,8 +28,23 @@ if (!url) fail("DATABASE_URL тохируулаагүй байна. Vercel → S
 if (!/^postgres(ql)?:\/\//.test(url)) fail(`DATABASE_URL нь PostgreSQL холболт байх ёстой ("${url.split(":")[0]}:" биш). Vercel дээр SQLite ажиллахгүй.`);
 if (!process.env.AUTH_SECRET || process.env.AUTH_SECRET.length < 32) fail("AUTH_SECRET тохируулаагүй эсвэл 32 тэмдэгтээс богино байна.");
 
+// IQ MATH-ийг тусдаа schema-д байршуулна (анхдагч "iqmath"). Ижил санд өөр төслийн хүснэгтүүд
+// (жишээ нь өөр апп-ын "User", _prisma_migrations) байсан ч хоорондоо холилдохгүй, юу ч устгахгүй.
+const SCHEMA = (process.env.DATABASE_SCHEMA || "iqmath").trim();
+if (!/^[a-z_][a-z0-9_]*$/.test(SCHEMA)) fail(`DATABASE_SCHEMA буруу: "${SCHEMA}" (жижиг латин үсэг, тоо, _ ашиглана).`);
+const withSchema = (u) => {
+  if (!u) return u;
+  const x = new URL(u);
+  x.searchParams.set("schema", SCHEMA);
+  return x.toString();
+};
+process.env.IQM_DB_SCHEMA = SCHEMA; // next.config.ts үүнийг серверийн кодонд оруулна
+process.env.DATABASE_URL = withSchema(url);
+console.log(`→ Schema: "${SCHEMA}"`);
+
 // Neon/Supabase-ийн pooler нь migration-д тохиромжгүй тул шууд холболтыг ашиглана
-const direct = process.env.DATABASE_URL_UNPOOLED || process.env.DIRECT_URL || process.env.POSTGRES_URL_NON_POOLING;
+const direct = withSchema(process.env.DATABASE_URL_UNPOOLED || process.env.DIRECT_URL || process.env.POSTGRES_URL_NON_POOLING);
+const Q = (name) => `"${SCHEMA}"."${name}"`; // schema-тай бүтэн нэр
 const schemaPath = "database/schema.prisma";
 let schema = readFileSync(schemaPath, "utf8").replace(/(datasource db \{\s*provider\s*=\s*)"sqlite"/, '$1"postgresql"');
 if (direct && !schema.includes("directUrl")) {
@@ -47,22 +62,24 @@ run("npx prisma generate");
 // байхгүй — түүхийг цэвэрлээд бүх migration-ыг шинээр хэрэгжүүлнэ.
 {
   const { PrismaClient } = await import("@prisma/client");
-  const db = new PrismaClient({ datasourceUrl: direct || url });
+  const db = new PrismaClient({ datasourceUrl: direct || process.env.DATABASE_URL });
   try {
+    await db.$executeRawUnsafe(`CREATE SCHEMA IF NOT EXISTS "${SCHEMA}"`);
     const [info] = await db.$queryRawUnsafe(`
       SELECT current_user AS "user", current_database() AS "database", current_schema() AS "schema",
              current_setting('search_path') AS "searchPath",
-             to_regclass('public."User"')::text AS "userTable",
-             to_regclass('public._prisma_migrations')::text AS "migrationsTable",
+             to_regclass('${Q("User")}')::text AS "userTable",
+             to_regclass('${Q("_prisma_migrations")}')::text AS "migrationsTable",
              (SELECT string_agg(DISTINCT table_schema, ', ') FROM information_schema.tables
-               WHERE table_name IN ('User', 'UploadedFile', 'Question')) AS "ourTablesIn"`);
+               WHERE table_name IN ('User', 'UploadedFile', 'Question')) AS "ourTablesIn",
+             (SELECT count(*)::int FROM information_schema.tables WHERE table_schema = 'public') AS "publicTables"`);
     console.log("\n→ Өгөгдлийн сангийн оношилгоо:", JSON.stringify(info));
     if (!info.userTable && info.migrationsTable) {
-      const hist = await db.$queryRawUnsafe(`SELECT migration_name AS name, finished_at IS NOT NULL AS done FROM public._prisma_migrations ORDER BY started_at`);
+      const hist = await db.$queryRawUnsafe(`SELECT migration_name AS name, finished_at IS NOT NULL AS done FROM ${Q("_prisma_migrations")} ORDER BY started_at`);
       if (hist.length) {
-        console.log(`⚠ Migration-ы түүх (${hist.map((h) => `${h.name}:${h.done ? "ok" : "failed"}`).join(", ")}) байгаа ч public."User" хүснэгт алга.`);
-        if (info.ourTablesIn) console.log(`  Манай хүснэгтүүд өөр schema-д байна: ${info.ourTablesIn}. Апп public schema-г ашигладаг тул public-д шинээр үүсгэнэ.`);
-        await db.$executeRawUnsafe(`DELETE FROM public._prisma_migrations`);
+        console.log(`⚠ Migration-ы түүх (${hist.map((h) => `${h.name}:${h.done ? "ok" : "failed"}`).join(", ")}) байгаа ч ${SCHEMA}."User" хүснэгт алга.`);
+        if (info.ourTablesIn) console.log(`  Манай хүснэгтүүд өөр schema-д байна: ${info.ourTablesIn}. Апп "${SCHEMA}" schema-г ашигладаг тул тэнд шинээр үүсгэнэ.`);
+        await db.$executeRawUnsafe(`DELETE FROM ${Q("_prisma_migrations")}`);
         console.log("  Буруу түүхийг цэвэрлэлээ — migration-уудыг шинээр хэрэгжүүлнэ.");
       }
     }
@@ -79,9 +96,9 @@ let migrate = run("npx prisma migrate deploy", { capture: true, allowFail: true 
 // дахин хэрэгжүүлнэ (манай migration-ууд давтан ажиллуулж болохуйц бичигдсэн).
 for (let attempt = 0; !migrate.ok && migrate.out.includes("P3009") && attempt < 3; attempt++) {
   const { PrismaClient } = await import("@prisma/client");
-  const db = new PrismaClient({ datasourceUrl: direct || url });
+  const db = new PrismaClient({ datasourceUrl: direct || process.env.DATABASE_URL });
   const failed = await db.$queryRawUnsafe(
-    `SELECT migration_name AS name, left(coalesce(logs, ''), 1500) AS logs FROM _prisma_migrations WHERE finished_at IS NULL AND rolled_back_at IS NULL`,
+    `SELECT migration_name AS name, left(coalesce(logs, ''), 1500) AS logs FROM ${Q("_prisma_migrations")} WHERE finished_at IS NULL AND rolled_back_at IS NULL`,
   );
   await db.$disconnect();
   for (const f of failed) {
@@ -104,8 +121,8 @@ if (!migrate.ok) {
   // Манай хүснэгтүүд байхгүй бол migration SQL-уудыг шууд хэрэгжүүлж, "хэрэгжсэн" гэж тэмдэглэнэ.
   console.log("\n→ Сан хоосон биш (P3005). Манай хүснэгтүүдийг шалгаж байна…");
   const { PrismaClient } = await import("@prisma/client");
-  const db = new PrismaClient({ datasourceUrl: direct || url });
-  const rows = await db.$queryRawUnsafe(`SELECT to_regclass('public."User"')::text AS t`);
+  const db = new PrismaClient({ datasourceUrl: direct || process.env.DATABASE_URL });
+  const rows = await db.$queryRawUnsafe(`SELECT to_regclass('${Q("User")}')::text AS t`);
   const others = await db.$queryRawUnsafe(
     `SELECT table_schema || '.' || table_name AS t FROM information_schema.tables WHERE table_schema NOT IN ('pg_catalog','information_schema') ORDER BY 1 LIMIT 20`,
   );

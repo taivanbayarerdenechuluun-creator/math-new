@@ -2,9 +2,23 @@ import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
+/**
+ * PostgreSQL дээр IQ MATH-ийг тусдаа schema-д байршуулах боломж (IQM_DB_SCHEMA, жишээ нь "iqmath").
+ * Ижил санд өөр төслийн хүснэгтүүд байхад хоорондоо холилдохгүй. Vercel build үүнийг build-ийн үед тохируулна.
+ */
+export function withSchema(url: string | undefined, schema = process.env.IQM_DB_SCHEMA): string | undefined {
+  if (!url || !schema || !/^postgres(ql)?:\/\//.test(url)) return url;
+  const u = new URL(url);
+  u.searchParams.set("schema", schema);
+  return u.toString();
+}
+
 export const db =
   globalForPrisma.prisma ??
-  new PrismaClient({ log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"] });
+  new PrismaClient({
+    datasourceUrl: withSchema(process.env.DATABASE_URL),
+    log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
+  });
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
 
