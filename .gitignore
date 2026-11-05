@@ -12,3 +12,5 @@ database/e2e.db*
 database/e2e-browser.db*
 tests/browser/.results
 tests/browser/screenshots
+tests/*.log
+tests/browser/last-*.txt
