@@ -1,0 +1,10 @@
+node_modules
+.next
+.env
+.env.local
+database/*.db
+database/*.db-journal
+storage/uploads/*
+tests/browser/.results
+tests/browser/screenshots
+.git

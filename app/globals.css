@@ -1,0 +1,254 @@
+@import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── IQ MATH дизайн токенууд ── */
+:root {
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --surface-2: #f1f3f9;
+  --surface-3: #e7eaf3;
+  --border: #e3e6ef;
+  --border-strong: #cfd4e2;
+  --text: #0e1330;
+  --text-muted: #5b6283;
+  --text-subtle: #8a90ab;
+
+  --primary: #5b3df5; /* electric violet */
+  --primary-hover: #4a2ee0;
+  --primary-soft: #efebff;
+  --primary-fg: #ffffff;
+  --accent: #0fb5d4; /* balanced cyan */
+  --accent-soft: #e2f7fb;
+  --indigo: #2b2e83;
+  --navy: #0b1030;
+
+  --success: #12a46b;
+  --success-soft: #e3f6ee;
+  --warning: #d48806;
+  --warning-soft: #fdf3dc;
+  --danger: #dc3b4b;
+  --danger-soft: #fde8ea;
+  --info: #3a6ff0;
+  --info-soft: #e6eeff;
+
+  --shadow-sm: 0 1px 2px rgba(14, 19, 48, 0.06);
+  --shadow-md: 0 4px 16px -4px rgba(14, 19, 48, 0.1), 0 2px 4px rgba(14, 19, 48, 0.04);
+  --shadow-lg: 0 18px 40px -12px rgba(43, 46, 131, 0.25);
+  --ring: 0 0 0 3px rgba(91, 61, 245, 0.25);
+}
+
+.dark {
+  --bg: #070a1f;
+  --surface: #0e1330;
+  --surface-2: #141a3d;
+  --surface-3: #1c2350;
+  --border: #20285a;
+  --border-strong: #2d366f;
+  --text: #eef0ff;
+  --text-muted: #a3a9cf;
+  --text-subtle: #737aa6;
+
+  --primary: #7c62ff;
+  --primary-hover: #8d77ff;
+  --primary-soft: #221d55;
+  --accent: #2fd0ec;
+  --accent-soft: #0d2c3d;
+
+  --success: #2fcf8c;
+  --success-soft: #0d2f26;
+  --warning: #f0b23a;
+  --warning-soft: #33280d;
+  --danger: #ff6676;
+  --danger-soft: #3a1520;
+  --info: #6b93ff;
+  --info-soft: #172552;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 20px -6px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 24px 50px -16px rgba(0, 0, 0, 0.7);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-fg: var(--text);
+  --color-muted: var(--text-muted);
+  --color-subtle: var(--text-subtle);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-indigo-deep: var(--indigo);
+  --color-navy: var(--navy);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-face), var(--font-body), ui-sans-serif, sans-serif;
+  --shadow-card: var(--shadow-md);
+  --shadow-soft: var(--shadow-sm);
+  --shadow-float: var(--shadow-lg);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+/* Grid-ийн хүүхэд элементүүд урт (truncate) текстээр баганаа сунгахаас сэргийлнэ */
+.grid > * {
+  min-width: 0;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--primary) 25%, transparent);
+}
+
+*:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+  border-radius: 8px;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Математик агуулга */
+.katex {
+  font-size: 1.06em;
+}
+.katex-display {
+  margin: 0.75em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 0;
+}
+.math-prose p {
+  margin: 0.6em 0;
+  line-height: 1.75;
+}
+.math-prose h2 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 1.4em 0 0.5em;
+}
+.math-prose h3 {
+  font-weight: 600;
+  margin: 1.1em 0 0.4em;
+}
+.math-prose ul,
+.math-prose ol {
+  margin: 0.5em 0;
+  padding-left: 1.4em;
+}
+.math-prose ul {
+  list-style: disc;
+}
+.math-prose ol {
+  list-style: decimal;
+}
+.math-prose li {
+  margin: 0.3em 0;
+  line-height: 1.7;
+}
+.math-prose strong {
+  font-weight: 650;
+}
+.math-prose table {
+  border-collapse: collapse;
+  margin: 0.8em 0;
+  font-size: 0.95em;
+}
+.math-prose td,
+.math-prose th {
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  text-align: center;
+}
+.math-prose th {
+  background: var(--surface-2);
+}
+
+/* Хүрээний гоёл: математикийн тор */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--border) 70%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--border) 70%, transparent) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.text-gradient {
+  background: linear-gradient(100deg, var(--primary) 10%, var(--accent) 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--surface) 60%, transparent), transparent);
+  animation: shimmer 1.4s infinite;
+}
+
+/* MathLive засварлагч */
+math-field {
+  display: block;
+  width: 100%;
+  font-size: 1.25rem;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  --caret-color: var(--primary);
+  --selection-background-color: var(--primary-soft);
+  --contains-highlight-background-color: var(--surface-2);
+}
+math-field:focus-within {
+  border-color: var(--primary);
+  box-shadow: var(--ring);
+}
+math-field::part(menu-toggle) {
+  color: var(--text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

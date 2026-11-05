@@ -1,0 +1,543 @@
+// IQ MATH — өгөгдлийн сангийн схем
+// Хөгжүүлэлтэд SQLite, production-д PostgreSQL (provider-ийг "postgresql" болгоход хангалттай).
+// Enum-уудыг String хэлбэрээр хадгалж, утгуудыг lib/constants.ts дээр нэг дор тодорхойлсон
+// (SQLite/PostgreSQL хоёуланд нь адил ажиллуулахын тулд).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ───────────────────────── Хэрэглэгч ба эрх ─────────────────────────
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  passwordHash   String
+  name           String
+  role           String    @default("STUDENT") // STUDENT | TEACHER | ADMIN
+  grade          Int?      // сурагчийн анги (6–12)
+  avatarColor    String    @default("violet")
+  xp             Int       @default(0)
+  streak         Int       @default(0)
+  longestStreak  Int       @default(0)
+  lastActiveDate String?   // YYYY-MM-DD
+  dailyGoal      Int       @default(5) // өдөрт бодох бодлогын зорилт
+  explainMode    String    @default("STANDARD") // BEGINNER | STANDARD | ADVANCED
+  isActive       Boolean   @default(true)
+  showOnLeaderboard Boolean @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  questionsAuthored   Question[]           @relation("QuestionAuthor")
+  questionsReviewed   Question[]           @relation("QuestionReviewer")
+  reviews             QuestionReview[]
+  importJobs          QuestionImportJob[]
+  examsCreated        Examination[]
+  attempts            ExaminationAttempt[]
+  practiceAnswers     PracticeAnswer[]
+  lessonProgress      LearningProgress[]
+  savedQuestions      SavedQuestion[]
+  solvedProblems      SolvedProblem[]
+  achievements        UserAchievement[]
+  dailyActivity       DailyActivity[]
+  conversations       AiConversation[]
+  files               UploadedFile[]
+  notifications       Notification[]
+  auditLogs           AuditLog[]
+  topicAssignments    TeacherTopicAssignment[]
+
+  @@index([role])
+}
+
+// Багшид тодорхой анги/сэдэв хариуцуулах (зөвшөөрөгдсөн контентыг засах эрх)
+model TeacherTopicAssignment {
+  id      String @id @default(cuid())
+  userId  String
+  gradeId Int
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  grade   Grade  @relation(fields: [gradeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, gradeId])
+}
+
+// ───────────────────────── Сургалтын хөтөлбөр ─────────────────────────
+
+model Grade {
+  id          Int     @id // 6..12
+  name        String
+  description String?
+
+  units       CurriculumUnit[]
+  questions   Question[]
+  exams       Examination[]
+  teachers    TeacherTopicAssignment[]
+}
+
+model CurriculumUnit {
+  id               String  @id @default(cuid())
+  gradeId          Int
+  title            String
+  description      String?
+  domain           String  // ARITHMETIC | ALGEBRA | FUNCTIONS | GEOMETRY | TRIGONOMETRY | STATISTICS | ADVANCED
+  order            Int     @default(0)
+  // Албан ёсны хөтөлбөртэй тулгаж баталгаажуулсан эсэх. Баталгаажаагүй бол UI дээр тэмдэглэгээтэй харагдана.
+  isOfficial       Boolean @default(false)
+  isEnrichment     Boolean @default(false)
+  verificationNote String?
+
+  grade  Grade   @relation(fields: [gradeId], references: [id], onDelete: Cascade)
+  topics Topic[]
+
+  @@index([gradeId, order])
+}
+
+model Topic {
+  id          String  @id @default(cuid())
+  unitId      String
+  slug        String  @unique
+  title       String
+  description String?
+  order       Int     @default(0)
+
+  unit          CurriculumUnit      @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  subtopics     Subtopic[]
+  lessons       Lesson[]
+  formulas      Formula[]
+  questions     Question[]
+  prerequisites TopicPrerequisite[] @relation("TopicDependent")
+  dependents    TopicPrerequisite[] @relation("TopicPrerequisite")
+
+  @@index([unitId, order])
+}
+
+model TopicPrerequisite {
+  id             String @id @default(cuid())
+  topicId        String
+  prerequisiteId String
+  topic          Topic  @relation("TopicDependent", fields: [topicId], references: [id], onDelete: Cascade)
+  prerequisite   Topic  @relation("TopicPrerequisite", fields: [prerequisiteId], references: [id], onDelete: Cascade)
+
+  @@unique([topicId, prerequisiteId])
+}
+
+model Subtopic {
+  id      String @id @default(cuid())
+  topicId String
+  title   String
+  order   Int    @default(0)
+
+  topic     Topic      @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  lessons   Lesson[]
+  questions Question[]
+}
+
+model Lesson {
+  id           String   @id @default(cuid())
+  topicId      String
+  subtopicId   String?
+  title        String
+  summary      String?
+  // Markdown + $LaTeX$ агуулга
+  content      String
+  examples     String   @default("[]") // JSON: [{problem, solution}]
+  order        Int      @default(0)
+  durationMin  Int      @default(15)
+  isPublished  Boolean  @default(true)
+  isEnrichment Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  topic    Topic              @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  subtopic Subtopic?          @relation(fields: [subtopicId], references: [id], onDelete: SetNull)
+  progress LearningProgress[]
+
+  @@index([topicId, order])
+}
+
+model Formula {
+  id          String  @id @default(cuid())
+  topicId     String
+  title       String
+  latex       String
+  description String?
+
+  topic Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+}
+
+// ───────────────────────── Бодлогын сан ─────────────────────────
+
+model QuestionSource {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  type      String     @default("OTHER") // TEXTBOOK | EXAM | TEACHER | IMPORT | OTHER
+  reference String?
+  questions Question[]
+}
+
+model Question {
+  id            String    @id @default(cuid())
+  code          String    @unique // IQM-000123
+  gradeId       Int
+  topicId       String?
+  subtopicId    String?
+  type          String    // MULTIPLE_CHOICE | NUMERIC | EXPRESSION | OPEN
+  difficulty    Int       @default(2) // 1 хялбар … 5 маш хүнд
+  title         String?
+  text          String    // засварласан (баталгаажсан) нөхцөл, $LaTeX$ агуулж болно
+  correctAnswer String?   // MC: option label (A/B/...), NUMERIC: тоо, EXPRESSION: илэрхийлэл
+  tolerance     Float?    // NUMERIC хариултын зөвшөөрөгдөх алдаа
+  explanation   String?
+  relatedFormulas String  @default("[]") // JSON string[]
+  tags          String    @default("") // таслалаар тусгаарласан
+  status        String    @default("DRAFT") // DRAFT | PROCESSING | NEEDS_REVIEW | VERIFIED | PUBLISHED | REJECTED
+  sourceId      String?
+  // OCR-ийн анхны (засаагүй) агуулгыг тусад нь хадгална
+  originalText  String?
+  ocrConfidence Float?
+  originalFileId String?
+  importJobId   String?
+  aiGenerated   Boolean   @default(false)
+  contentHash   String?   // давхардал илрүүлэх
+  authorId      String?
+  reviewerId    String?
+  reviewedAt    DateTime?
+  publishedAt   DateTime?
+  timesAnswered Int       @default(0)
+  timesCorrect  Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  grade        Grade               @relation(fields: [gradeId], references: [id])
+  topic        Topic?              @relation(fields: [topicId], references: [id], onDelete: SetNull)
+  subtopic     Subtopic?           @relation(fields: [subtopicId], references: [id], onDelete: SetNull)
+  source       QuestionSource?     @relation(fields: [sourceId], references: [id], onDelete: SetNull)
+  originalFile UploadedFile?       @relation(fields: [originalFileId], references: [id], onDelete: SetNull)
+  importJob    QuestionImportJob?  @relation(fields: [importJobId], references: [id], onDelete: SetNull)
+  author       User?               @relation("QuestionAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  reviewer     User?               @relation("QuestionReviewer", fields: [reviewerId], references: [id], onDelete: SetNull)
+  options      QuestionOption[]
+  solutions    Solution[]
+  reviews      QuestionReview[]
+  examLinks    ExaminationQuestion[]
+  answers      StudentAnswer[]
+  practice     PracticeAnswer[]
+  saved        SavedQuestion[]
+
+  @@index([gradeId, topicId, difficulty])
+  @@index([status])
+  @@index([contentHash])
+}
+
+model QuestionOption {
+  id         String  @id @default(cuid())
+  questionId String
+  label      String  // A, B, C, D, E
+  text       String
+  isCorrect  Boolean @default(false)
+  order      Int     @default(0)
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([questionId, label])
+}
+
+model Solution {
+  id           String   @id @default(cuid())
+  questionId   String
+  method       String?  // аргын нэр
+  steps        String   @default("[]") // JSON: [{title, latex?, explanation}]
+  finalAnswer  String?
+  isAiGenerated Boolean @default(false)
+  isVerified   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+}
+
+model QuestionReview {
+  id         String   @id @default(cuid())
+  questionId String
+  reviewerId String
+  action     String   // APPROVE | REJECT | EDIT | PUBLISH | UNPUBLISH | COMMENT
+  comment    String?
+  createdAt  DateTime @default(now())
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  reviewer User     @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+
+  @@index([questionId])
+}
+
+model QuestionImportJob {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String   // IMAGE | PDF | CSV | XLSX | JSON
+  fileName  String
+  status    String   @default("PENDING") // PENDING | PROCESSING | COMPLETED | PARTIAL | FAILED
+  total     Int      @default(0)
+  succeeded Int      @default(0)
+  failed    Int      @default(0)
+  errors    String   @default("[]") // JSON: [{row, message}]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questions Question[]
+}
+
+// ───────────────────────── Шалгалт ─────────────────────────
+
+model Examination {
+  id              String    @id @default(cuid())
+  title           String
+  description     String?
+  gradeId         Int
+  durationMinutes Int       @default(40)
+  passingScore    Int       @default(60) // хувь
+  randomize       Boolean   @default(true)
+  availableFrom   DateTime?
+  availableTo     DateTime?
+  isPublished     Boolean   @default(false)
+  showSolutions   Boolean   @default(true)
+  createdById     String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  grade     Grade                 @relation(fields: [gradeId], references: [id])
+  createdBy User?                 @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  questions ExaminationQuestion[]
+  attempts  ExaminationAttempt[]
+}
+
+model ExaminationQuestion {
+  id         String @id @default(cuid())
+  examId     String
+  questionId String
+  order      Int    @default(0)
+  points     Int    @default(1)
+
+  exam     Examination @relation(fields: [examId], references: [id], onDelete: Cascade)
+  question Question    @relation(fields: [questionId], references: [id], onDelete: Restrict)
+
+  @@unique([examId, questionId])
+}
+
+model ExaminationAttempt {
+  id            String    @id @default(cuid())
+  examId        String
+  userId        String
+  status        String    @default("IN_PROGRESS") // IN_PROGRESS | SUBMITTED | AUTO_SUBMITTED
+  questionOrder String    @default("[]") // JSON: question id-ууд (санамсаргүй дараалал)
+  startedAt     DateTime  @default(now())
+  deadline      DateTime
+  submittedAt   DateTime?
+  score         Float?
+  maxScore      Float?
+  percentage    Float?
+  pendingReview Boolean   @default(false) // нээлттэй бодлого багшийн шалгалт хүлээж буй
+
+  exam    Examination     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  user    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  answers StudentAnswer[]
+
+  @@index([userId, examId])
+}
+
+model StudentAnswer {
+  id              String   @id @default(cuid())
+  attemptId       String
+  questionId      String
+  answer          String?
+  markedForReview Boolean  @default(false)
+  isCorrect       Boolean?
+  pointsAwarded   Float?
+  gradedBy        String?  // AUTO | TEACHER | AI_ASSISTED
+  feedback        String?
+  updatedAt       DateTime @updatedAt
+
+  attempt  ExaminationAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question Question           @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([attemptId, questionId])
+}
+
+// ───────────────────────── Ахиц, дасгал ─────────────────────────
+
+model PracticeAnswer {
+  id           String   @id @default(cuid())
+  userId       String
+  questionId   String
+  answer       String
+  isCorrect    Boolean
+  timeSpentSec Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model LearningProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  lessonId    String
+  completedAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+}
+
+model SavedQuestion {
+  id         String   @id @default(cuid())
+  userId     String
+  questionId String
+  note       String?
+  createdAt  DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+}
+
+// Сурагчийн өөрөө оруулсан бодлого (бодогчийн түүх)
+model SolvedProblem {
+  id              String   @id @default(cuid())
+  userId          String
+  inputType       String   // TEXT | IMAGE | CAMERA | PDF
+  originalText    String?  // сурагчийн бичсэн / OCR-ийн анхны текст
+  recognizedLatex String?  // баталгаажуулсан илэрхийлэл
+  imageFileId     String?
+  solution        String   // JSON (SolutionResult)
+  topic           String?
+  engine          String   // SYMBOLIC | AI | AI+SYMBOLIC
+  verification    String   // VERIFIED | MISMATCH | UNVERIFIED
+  feedback        String?  // HELPFUL | NOT_HELPFUL
+  isFavorite      Boolean  @default(false)
+  createdAt       DateTime @default(now())
+
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  imageFile UploadedFile? @relation(fields: [imageFileId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+}
+
+model DailyActivity {
+  id             String @id @default(cuid())
+  userId         String
+  date           String // YYYY-MM-DD
+  problemsSolved Int    @default(0)
+  correct        Int    @default(0)
+  lessonsDone    Int    @default(0)
+  minutes        Int    @default(0)
+  xpEarned       Int    @default(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+}
+
+// ───────────────────────── Тоглоомжуулалт ─────────────────────────
+
+model Achievement {
+  id          String @id @default(cuid())
+  code        String @unique
+  title       String
+  description String
+  icon        String @default("trophy")
+  xpReward    Int    @default(50)
+
+  users UserAchievement[]
+}
+
+model UserAchievement {
+  id            String   @id @default(cuid())
+  userId        String
+  achievementId String
+  earnedAt      DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+}
+
+// ───────────────────────── AI багш ─────────────────────────
+
+model AiConversation {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String   @default("Шинэ яриа")
+  mode      String   @default("STANDARD") // BEGINNER | STANDARD | ADVANCED
+  guided    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages AiMessage[]
+
+  @@index([userId, updatedAt])
+}
+
+model AiMessage {
+  id             String   @id @default(cuid())
+  conversationId String
+  role           String   // user | assistant
+  content        String
+  createdAt      DateTime @default(now())
+
+  conversation AiConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+}
+
+// ───────────────────────── Систем ─────────────────────────
+
+model UploadedFile {
+  id        String   @id @default(cuid())
+  userId    String
+  fileName  String
+  mimeType  String
+  size      Int
+  path      String   // storage доторх харьцангуй зам
+  purpose   String   // SOLVER | QUESTION_IMPORT | QUESTION_IMAGE
+  createdAt DateTime @default(now())
+
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questions Question[]
+  problems  SolvedProblem[]
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  body      String
+  link      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  entity    String
+  entityId  String?
+  details   String?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+}

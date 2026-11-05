@@ -1,0 +1,15 @@
+[WebServer] warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+[WebServer] For more information, see: https://pris.ly/prisma-config
+[WebServer] 
+
+[WebServer] Environment variables loaded from .env
+
+[WebServer] (node:18116) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+[WebServer] (Use `node --trace-deprecation ...` to show where the warning was created)
+
+
+Running 2 tests using 1 worker
+
+[1/2] [mobile] › tests\browser\mobile.spec.ts:5:7 › Гар утас › хэвтээ гүйлгээгүй, доод цэс, камерын fallback
+[2/2] [mobile] › tests\browser\mobile.spec.ts:47:7 › Гар утас › гар утсан дээр шалгалтын асуултын жагсаалт
+  2 passed (38.5s)

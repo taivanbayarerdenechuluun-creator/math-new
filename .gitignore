@@ -1,0 +1,14 @@
+node_modules
+.next
+.env
+.env.local
+storage/uploads/*
+!storage/uploads/.gitkeep
+database/*.db
+database/*.db-journal
+*.tsbuildinfo
+next-env.d.ts
+database/e2e.db*
+database/e2e-browser.db*
+tests/browser/.results
+tests/browser/screenshots

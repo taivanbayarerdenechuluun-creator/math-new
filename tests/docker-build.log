@@ -1,0 +1,348 @@
+ Image moms-app Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 491B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 868B 0.0s done
+#2 DONE 0.1s
+
+#3 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#3 DONE 8.2s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 185B 0.0s done
+#4 DONE 0.1s
+
+#5 [internal] load build context
+#5 DONE 0.0s
+
+#6 [base 1/3] FROM docker.io/library/node:22-bookworm-slim@sha256:4b150b48b4116e2a22f2c39cc27025fbf4f153e2078fd3b14d159fdb5c7279da
+#6 resolve docker.io/library/node:22-bookworm-slim@sha256:4b150b48b4116e2a22f2c39cc27025fbf4f153e2078fd3b14d159fdb5c7279da 0.0s done
+#6 ...
+
+#5 [internal] load build context
+#5 transferring context: 3.03MB 0.3s done
+#5 DONE 0.4s
+
+#6 [base 1/3] FROM docker.io/library/node:22-bookworm-slim@sha256:4b150b48b4116e2a22f2c39cc27025fbf4f153e2078fd3b14d159fdb5c7279da
+#6 sha256:0bee45faaffff77eee1e3d151cc650b854df28523ea01e5a2dcc0327da8793a9 0B / 448B 0.3s
+#6 sha256:d22dd8aef5082b9de7fb037db9c398ee2822c5c81cc5cbb63bb32a46a5decdb1 0B / 1.71MB 0.2s
+#6 sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 0B / 49.89MB 0.2s
+#6 sha256:709e8267cebf108d59c4e6e386882a5c79c10bbe11ecd02c6ed9ed4efa5b905d 0B / 3.31kB 0.2s
+#6 sha256:0bee45faaffff77eee1e3d151cc650b854df28523ea01e5a2dcc0327da8793a9 448B / 448B 0.5s done
+#6 sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc 0B / 28.25MB 0.2s
+#6 sha256:709e8267cebf108d59c4e6e386882a5c79c10bbe11ecd02c6ed9ed4efa5b905d 3.31kB / 3.31kB 1.3s done
+#6 sha256:d22dd8aef5082b9de7fb037db9c398ee2822c5c81cc5cbb63bb32a46a5decdb1 1.05MB / 1.71MB 1.5s
+#6 sha256:d22dd8aef5082b9de7fb037db9c398ee2822c5c81cc5cbb63bb32a46a5decdb1 1.71MB / 1.71MB 1.6s
+#6 sha256:d22dd8aef5082b9de7fb037db9c398ee2822c5c81cc5cbb63bb32a46a5decdb1 1.71MB / 1.71MB 1.7s done
+#6 sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 3.15MB / 49.89MB 2.2s
+#6 sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc 2.10MB / 28.25MB 1.8s
+#6 sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 7.34MB / 49.89MB 3.1s
+#6 sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc 4.19MB / 28.25MB 2.5s
+#6 sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc 6.29MB / 28.25MB 2.8s
+#6 sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 10.49MB / 49.89MB 3.6s
+#6 sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc 9.44MB / 28.25MB 4.3s
+#6 sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 14.68MB / 49.89MB 5.8s
+#6 sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc 11.53MB / 28.25MB 5.4s
+#6 sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc 13.63MB / 28.25MB 5.8s
+#6 sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 17.83MB / 49.89MB 6.7s
+#6 sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc 15.73MB / 28.25MB 6.3s
+#6 sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 20.97MB / 49.89MB 7.0s
+#6 sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc 17.83MB / 28.25MB 6.7s
+#6 sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 24.12MB / 49.89MB 10.3s
+#6 sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc 19.92MB / 28.25MB 9.8s
+#6 sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc 22.02MB / 28.25MB 10.0s
+#6 sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 27.26MB / 49.89MB 11.1s
+#6 sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc 24.12MB / 28.25MB 11.4s
+#6 sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 30.41MB / 49.89MB 13.5s
+#6 sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc 26.21MB / 28.25MB 13.3s
+#6 sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 33.55MB / 49.89MB 14.7s
+#6 sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc 28.25MB / 28.25MB 14.1s done
+#6 extracting sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc
+#6 sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 36.70MB / 49.89MB 15.6s
+#6 extracting sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc 1.3s done
+#6 extracting sha256:709e8267cebf108d59c4e6e386882a5c79c10bbe11ecd02c6ed9ed4efa5b905d 0.0s done
+#6 sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 39.85MB / 49.89MB 16.5s
+#6 sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 42.99MB / 49.89MB 17.2s
+#6 sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 46.14MB / 49.89MB 18.4s
+#6 sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 49.28MB / 49.89MB 19.5s
+#6 sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 49.89MB / 49.89MB 19.6s done
+#6 extracting sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c
+#6 extracting sha256:df736340692d217b57cd447c94f978f9a91ce3e8805b225e78374eae3aff864c 1.6s done
+#6 DONE 21.6s
+
+#6 [base 1/3] FROM docker.io/library/node:22-bookworm-slim@sha256:4b150b48b4116e2a22f2c39cc27025fbf4f153e2078fd3b14d159fdb5c7279da
+#6 extracting sha256:d22dd8aef5082b9de7fb037db9c398ee2822c5c81cc5cbb63bb32a46a5decdb1 0.1s done
+#6 extracting sha256:0bee45faaffff77eee1e3d151cc650b854df28523ea01e5a2dcc0327da8793a9 0.0s done
+#6 DONE 21.7s
+
+#7 [base 2/3] WORKDIR /app
+#7 DONE 0.2s
+
+#8 [base 3/3] RUN apt-get update && apt-get install -y --no-install-recommends openssl ca-certificates && rm -rf /var/lib/apt/lists/*
+#8 0.775 Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+#8 1.281 Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+#8 1.407 Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [34.8 kB]
+#8 1.542 Get:4 http://deb.debian.org/debian bookworm/main amd64 Packages [8790 kB]
+#8 3.115 Get:5 http://deb.debian.org/debian bookworm-updates/main amd64 Packages [6924 B]
+#8 3.199 Get:6 http://deb.debian.org/debian-security bookworm-security/main amd64 Packages [361 kB]
+#8 4.269 Fetched 9399 kB in 4s (2350 kB/s)
+#8 4.269 Reading package lists...
+#8 5.092 Reading package lists...
+#8 5.773 Building dependency tree...
+#8 5.935 Reading state information...
+#8 6.107 The following additional packages will be installed:
+#8 6.108   libssl3
+#8 6.134 The following NEW packages will be installed:
+#8 6.135   ca-certificates libssl3 openssl
+#8 6.405 0 upgraded, 3 newly installed, 0 to remove and 3 not upgraded.
+#8 6.405 Need to get 3643 kB of archives.
+#8 6.405 After this operation, 8955 kB of additional disk space will be used.
+#8 6.405 Get:1 http://deb.debian.org/debian-security bookworm-security/main amd64 libssl3 amd64 3.0.22-1~deb12u2 [2040 kB]
+#8 7.211 Get:2 http://deb.debian.org/debian-security bookworm-security/main amd64 openssl amd64 3.0.22-1~deb12u2 [1442 kB]
+#8 7.444 Get:3 http://deb.debian.org/debian-security bookworm-security/main amd64 ca-certificates all 20250419~deb12u2 [161 kB]
+#8 7.626 debconf: delaying package configuration, since apt-utils is not installed
+#8 7.661 Fetched 3643 kB in 1s (2749 kB/s)
+#8 7.697 Selecting previously unselected package libssl3:amd64.
+#8 7.697 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 6096 files and directories currently installed.)
+#8 7.709 Preparing to unpack .../libssl3_3.0.22-1~deb12u2_amd64.deb ...
+#8 7.722 Unpacking libssl3:amd64 (3.0.22-1~deb12u2) ...
+#8 7.967 Selecting previously unselected package openssl.
+#8 7.968 Preparing to unpack .../openssl_3.0.22-1~deb12u2_amd64.deb ...
+#8 7.980 Unpacking openssl (3.0.22-1~deb12u2) ...
+#8 8.140 Selecting previously unselected package ca-certificates.
+#8 8.141 Preparing to unpack .../ca-certificates_20250419~deb12u2_all.deb ...
+#8 8.148 Unpacking ca-certificates (20250419~deb12u2) ...
+#8 8.213 Setting up libssl3:amd64 (3.0.22-1~deb12u2) ...
+#8 8.228 Setting up openssl (3.0.22-1~deb12u2) ...
+#8 8.250 Setting up ca-certificates (20250419~deb12u2) ...
+#8 8.340 debconf: unable to initialize frontend: Dialog
+#8 8.340 debconf: (TERM is not set, so the dialog frontend is not usable.)
+#8 8.340 debconf: falling back to frontend: Readline
+#8 8.340 debconf: unable to initialize frontend: Readline
+#8 8.340 debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC contains: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.36.0 /usr/local/share/perl/5.36.0 /usr/lib/x86_64-linux-gnu/perl5/5.36 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.36 /usr/share/perl/5.36 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 7.)
+#8 8.340 debconf: falling back to frontend: Teletype
+#8 8.843 Updating certificates in /etc/ssl/certs...
+#8 9.687 148 added, 0 removed; done.
+#8 9.763 Processing triggers for libc-bin (2.36-9+deb12u14) ...
+#8 9.787 Processing triggers for ca-certificates (20250419~deb12u2) ...
+#8 9.796 Updating certificates in /etc/ssl/certs...
+#8 10.44 0 added, 0 removed; done.
+#8 10.44 Running hooks in /etc/ca-certificates/update.d...
+#8 10.45 done.
+#8 DONE 10.5s
+
+#9 [deps 1/2] COPY package.json package-lock.json ./
+#9 DONE 0.1s
+
+#10 [deps 2/2] RUN npm ci
+#10 7.625 npm warn deprecated recharts@2.15.4: 1.x and 2.x branches are no longer active. Bump to Recharts v3 to receive latest features and bugfixes. See https://github.com/recharts/recharts/wiki/3.0-migration-guide
+#10 121.6 
+#10 121.6 added 219 packages, and audited 226 packages in 2m
+#10 121.6 
+#10 121.6 39 packages are looking for funding
+#10 121.6   run `npm fund` for details
+#10 121.8 
+#10 121.8 12 vulnerabilities (1 low, 2 moderate, 7 high, 2 critical)
+#10 121.8 
+#10 121.8 To address all issues possible (including breaking changes), run:
+#10 121.8   npm audit fix --force
+#10 121.8 
+#10 121.8 Some issues need review, and may require choosing
+#10 121.8 a different dependency.
+#10 121.8 
+#10 121.8 Run `npm audit` for details.
+#10 121.8 npm notice
+#10 121.8 npm notice New major version of npm available! 10.9.9 -> 12.2.2
+#10 121.8 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+#10 121.8 npm notice To update run: npm install -g npm@12.2.2
+#10 121.8 npm notice
+#10 DONE 122.0s
+
+#11 [build 1/3] COPY --from=deps /app/node_modules ./node_modules
+#11 DONE 5.4s
+
+#12 [build 2/3] COPY . .
+#12 DONE 0.4s
+
+#13 [build 3/3] RUN node scripts/use-db.mjs postgresql && npx prisma generate && npx next build
+#13 0.349 ✔ database/schema.prisma → provider = "postgresql". Одоо: npx prisma generate
+#13 2.361 warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+#13 2.361 For more information, see: https://pris.ly/prisma-config
+#13 2.361 
+#13 2.435 Prisma schema loaded from database/schema.prisma
+#13 13.26 
+#13 13.26 ✔ Generated Prisma Client (v6.19.3) to ./node_modules/@prisma/client in 549ms
+#13 13.26 
+#13 13.26 Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+#13 13.26 
+#13 13.26 Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+#13 13.26 
+#13 13.28 npm notice
+#13 13.28 npm notice New major version of npm available! 10.9.9 -> 12.2.2
+#13 13.28 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+#13 13.28 npm notice To update run: npm install -g npm@12.2.2
+#13 13.28 npm notice
+#13 14.96 Attention: Next.js now collects completely anonymous telemetry regarding usage.
+#13 14.96 This information is used to shape Next.js' roadmap and prioritize features.
+#13 14.96 You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+#13 14.96 https://nextjs.org/telemetry
+#13 14.96 
+#13 15.13    ▲ Next.js 15.5.29
+#13 15.13    - Experiments (use with caution):
+#13 15.13      · serverActions
+#13 15.13 
+#13 15.31    Creating an optimized production build ...
+#13 54.31  ⚠ Compiled with warnings in 2.2s
+#13 54.31 
+#13 54.31 ./node_modules/jose/dist/webapi/lib/deflate.js
+#13 54.31 A Node.js API is used (CompressionStream at line: 32) which is not supported in the Edge Runtime.
+#13 54.31 Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+#13 54.31 
+#13 54.31 Import trace for requested module:
+#13 54.31 ./node_modules/jose/dist/webapi/lib/deflate.js
+#13 54.31 ./node_modules/jose/dist/webapi/lib/jwe_decrypt.js
+#13 54.31 ./node_modules/jose/dist/webapi/jwt/decrypt.js
+#13 54.31 ./node_modules/jose/dist/webapi/index.js
+#13 54.31 ./lib/session.ts
+#13 54.31 
+#13 54.31 ./node_modules/jose/dist/webapi/lib/deflate.js
+#13 54.31 A Node.js API is used (DecompressionStream at line: 35) which is not supported in the Edge Runtime.
+#13 54.31 Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+#13 54.31 
+#13 54.31 Import trace for requested module:
+#13 54.31 ./node_modules/jose/dist/webapi/lib/deflate.js
+#13 54.31 ./node_modules/jose/dist/webapi/lib/jwe_decrypt.js
+#13 54.31 ./node_modules/jose/dist/webapi/jwt/decrypt.js
+#13 54.31 ./node_modules/jose/dist/webapi/index.js
+#13 54.31 ./lib/session.ts
+#13 54.31 
+#13 67.34  ✓ Compiled successfully in 47s
+#13 67.36    Linting and checking validity of types ...
+#13 84.62    Collecting page data ...
+#13 92.05    Generating static pages (0/25) ...
+#13 92.94    Generating static pages (6/25) 
+#13 93.02    Generating static pages (12/25) 
+#13 93.19    Generating static pages (18/25) 
+#13 93.41  ✓ Generating static pages (25/25)
+#13 95.33    Finalizing page optimization ...
+#13 95.33    Collecting build traces ...
+#13 105.3 
+#13 105.3 Route (app)                                    Size  First Load JS
+#13 105.3 ┌ ƒ /                                       4.78 kB         239 kB
+#13 105.3 ├ ○ /_not-found                               221 B         103 kB
+#13 105.3 ├ ƒ /admin                                    192 B         228 kB
+#13 105.3 ├ ƒ /admin/analytics                          192 B         228 kB
+#13 105.3 ├ ƒ /admin/audit                            1.52 kB         108 kB
+#13 105.3 ├ ƒ /admin/curriculum                        8.7 kB         247 kB
+#13 105.3 ├ ƒ /admin/exams                            1.52 kB         108 kB
+#13 105.3 ├ ƒ /admin/exams/[id]                       1.33 kB         247 kB
+#13 105.3 ├ ƒ /admin/exams/new                          202 B         246 kB
+#13 105.3 ├ ƒ /admin/import                           8.87 kB         250 kB
+#13 105.3 ├ ƒ /admin/profile                            142 B         167 kB
+#13 105.3 ├ ƒ /admin/questions                        1.52 kB         108 kB
+#13 105.3 ├ ƒ /admin/questions/[id]                   3.56 kB         250 kB
+#13 105.3 ├ ƒ /admin/questions/new                    1.96 kB         248 kB
+#13 105.3 ├ ƒ /admin/review                           1.52 kB         108 kB
+#13 105.3 ├ ƒ /admin/students                         1.52 kB         108 kB
+#13 105.3 ├ ƒ /admin/students/[id]                      192 B         228 kB
+#13 105.3 ├ ƒ /admin/users                            3.06 kB         168 kB
+#13 105.3 ├ ƒ /api/admin/curriculum/[entity]            221 B         103 kB
+#13 105.3 ├ ƒ /api/admin/curriculum/[entity]/[id]       221 B         103 kB
+#13 105.3 ├ ƒ /api/admin/exams                          221 B         103 kB
+#13 105.3 ├ ƒ /api/admin/exams/[id]                     221 B         103 kB
+#13 105.3 ├ ƒ /api/admin/grading/[answerId]             221 B         103 kB
+#13 105.3 ├ ƒ /api/admin/import/bulk                    221 B         103 kB
+#13 105.3 ├ ƒ /api/admin/import/ocr-commit              221 B         103 kB
+#13 105.3 ├ ƒ /api/admin/import/template                221 B         103 kB
+#13 105.3 ├ ƒ /api/admin/questions                      221 B         103 kB
+#13 105.3 ├ ƒ /api/admin/questions/[id]                 221 B         103 kB
+#13 105.3 ├ ƒ /api/admin/questions/[id]/status          221 B         103 kB
+#13 105.3 ├ ƒ /api/admin/questions/assist               221 B         103 kB
+#13 105.3 ├ ƒ /api/admin/upload                         221 B         103 kB
+#13 105.3 ├ ƒ /api/admin/users                          221 B         103 kB
+#13 105.3 ├ ƒ /api/admin/users/[id]                     221 B         103 kB
+#13 105.3 ├ ƒ /api/attempts/[id]/answer                 221 B         103 kB
+#13 105.3 ├ ƒ /api/attempts/[id]/submit                 221 B         103 kB
+#13 105.3 ├ ƒ /api/auth/login                           221 B         103 kB
+#13 105.3 ├ ƒ /api/auth/logout                          221 B         103 kB
+#13 105.3 ├ ƒ /api/auth/register                        221 B         103 kB
+#13 105.3 ├ ƒ /api/exams/[id]/start                     221 B         103 kB
+#13 105.3 ├ ƒ /api/files/[id]                           221 B         103 kB
+#13 105.3 ├ ƒ /api/lessons/[id]/complete                221 B         103 kB
+#13 105.3 ├ ƒ /api/notifications                        221 B         103 kB
+#13 105.3 ├ ƒ /api/practice/answer                      221 B         103 kB
+#13 105.3 ├ ƒ /api/profile                              221 B         103 kB
+#13 105.3 ├ ƒ /api/saved                                221 B         103 kB
+#13 105.3 ├ ƒ /api/solver/history/[id]                  221 B         103 kB
+#13 105.3 ├ ƒ /api/solver/recognize                     221 B         103 kB
+#13 105.3 ├ ƒ /api/solver/solve                         221 B         103 kB
+#13 105.3 ├ ƒ /api/tutor/conversations                  221 B         103 kB
+#13 105.3 ├ ƒ /api/tutor/conversations/[id]             221 B         103 kB
+#13 105.3 ├ ƒ /api/tutor/conversations/[id]/messages    221 B         103 kB
+#13 105.3 ├ ○ /login                                  4.82 kB         121 kB
+#13 105.3 ├ ○ /privacy                                  169 B         106 kB
+#13 105.3 ├ ○ /register                               1.98 kB         122 kB
+#13 105.3 ├ ƒ /student                                  191 B         228 kB
+#13 105.3 ├ ƒ /student/exams                          1.52 kB         108 kB
+#13 105.3 ├ ƒ /student/exams/[id]                     4.68 kB         162 kB
+#13 105.3 ├ ƒ /student/exams/attempt/[id]             8.24 kB         246 kB
+#13 105.3 ├ ƒ /student/exams/result/[id]              1.73 kB         310 kB
+#13 105.3 ├ ƒ /student/learn                          1.52 kB         108 kB
+#13 105.3 ├ ƒ /student/learn/lesson/[id]              6.06 kB         240 kB
+#13 105.3 ├ ƒ /student/learn/topic/[slug]             1.52 kB         108 kB
+#13 105.3 ├ ƒ /student/practice                       6.43 kB         244 kB
+#13 105.3 ├ ƒ /student/profile                          142 B         167 kB
+#13 105.3 ├ ƒ /student/progress                         192 B         228 kB
+#13 105.3 ├ ƒ /student/saved                          2.24 kB         243 kB
+#13 105.3 ├ ƒ /student/solve                          17.5 kB         263 kB
+#13 105.3 ├ ƒ /student/solve/history/[id]             2.52 kB         245 kB
+#13 105.3 ├ ƒ /student/tutor                          7.64 kB         246 kB
+#13 105.3 └ ○ /terms                                    169 B         106 kB
+#13 105.3 + First Load JS shared by all                103 kB
+#13 105.3   ├ chunks/1255-d8a1861c775d9bcc.js         46.3 kB
+#13 105.3   ├ chunks/4bd1b696-100b9d70ed4e49c1.js     54.2 kB
+#13 105.3   └ other shared chunks (total)             2.09 kB
+#13 105.3 
+#13 105.3 
+#13 105.3 ƒ Middleware                                  40 kB
+#13 105.3 
+#13 105.3 ○  (Static)   prerendered as static content
+#13 105.3 ƒ  (Dynamic)  server-rendered on demand
+#13 105.3 
+#13 DONE 105.4s
+
+#14 [runner 1/2] COPY --from=build /app ./
+#14 DONE 6.2s
+
+#15 [runner 2/2] RUN mkdir -p storage/uploads && chown -R node:node storage
+#15 DONE 0.7s
+
+#16 exporting to image
+#16 exporting layers
+#16 exporting layers 62.4s done
+#16 exporting manifest sha256:727206fdc82dde8e4964be296d3659fe8651c126b47f86df0a84be1bc3e64c15 0.0s done
+#16 exporting config sha256:70118ee2c3a6eef8e466a9430023a592f40a477aa4c9f882c3494d3dcdc84f58 0.0s done
+#16 exporting attestation manifest sha256:c8fd92f0da7c6c452682f0fb15747daf9776cf3ce6a98bf58fc4211aa64c1bf1
+#16 exporting attestation manifest sha256:c8fd92f0da7c6c452682f0fb15747daf9776cf3ce6a98bf58fc4211aa64c1bf1 0.0s done
+#16 exporting manifest list sha256:0b2156fd8708c339ca5eb46432743a473c406feb7c3f97d593bfb9d2d84abedd 0.0s done
+#16 naming to docker.io/library/moms-app:latest done
+#16 unpacking to docker.io/library/moms-app:latest
+#16 unpacking to docker.io/library/moms-app:latest 30.0s done
+#16 DONE 92.7s
+
+#17 resolving provenance for metadata file
+#17 DONE 0.1s
+ Image moms-app Built 
+ Container moms-db-1 Running 
+ Volume moms_uploads Creating 
+ Volume moms_uploads Creating 
+ Volume moms_uploads Created 
+ Volume moms_uploads Created 
+ Container moms-app-1 Creating 
+ Container moms-app-1 Created 
+ Container moms-db-1 Waiting 
+ Container moms-db-1 Healthy 
+ Container moms-app-1 Starting 
+ Container moms-app-1 Started 

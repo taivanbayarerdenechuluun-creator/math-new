@@ -1,0 +1,41 @@
+# Production-тэй адил орчин: PostgreSQL + IQ MATH.
+#   docker compose up -d --build
+#   docker compose exec app npx tsx database/seed/seed.ts   (анхны өгөгдөл, заавал биш)
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: iqmath
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-iqmath_dev_password}
+      POSTGRES_DB: iqmath
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U iqmath -d iqmath"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://iqmath:${POSTGRES_PASSWORD:-iqmath_dev_password}@db:5432/iqmath
+      AUTH_SECRET: ${AUTH_SECRET:?AUTH_SECRET тохируулна уу (32+ тэмдэгт)}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      AI_MODEL: ${AI_MODEL:-claude-opus-5-5}
+      MATHPIX_APP_ID: ${MATHPIX_APP_ID:-}
+      MATHPIX_APP_KEY: ${MATHPIX_APP_KEY:-}
+      STORAGE_DIR: /app/storage/uploads
+    ports:
+      - "3000:3000"
+    volumes:
+      - uploads:/app/storage/uploads
+
+volumes:
+  pgdata:
+  uploads:

@@ -1,0 +1,66 @@
+[WebServer] warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+[WebServer] For more information, see: https://pris.ly/prisma-config
+[WebServer] 
+
+[WebServer] Environment variables loaded from .env
+
+[WebServer] (node:8200) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+[WebServer] (Use `node --trace-deprecation ...` to show where the warning was created)
+
+
+Running 18 tests using 1 worker
+
+[1/18] [desktop] › tests\browser\staff.spec.ts:5:7 › Багш ба админ › багш бодлого үүсгэж хянуулахаар илгээнэ, админ баталгаажуулж нийтэлнэ
+[2/18] [desktop] › tests\browser\staff.spec.ts:36:7 › Багш ба админ › хянах дараалал ба хуваагдсан дэлгэц
+[3/18] [desktop] › tests\browser\staff.spec.ts:48:7 › Багш ба админ › бөөн импорт: загвар → урьдчилан харах → импорт
+[4/18] [desktop] › tests\browser\staff.spec.ts:62:7 › Багш ба админ › шалгалт үүсгэх: автомат сонголт
+[5/18] [desktop] › tests\browser\staff.spec.ts:75:7 › Багш ба админ › хөтөлбөр ба админы хуудсууд
+[6/18] [desktop] › tests\browser\student.spec.ts:5:7 › Нийтийн хэсэг › нүүр хуудас ба интерактив парабол
+[7/18] [desktop] › tests\browser\student.spec.ts:19:7 › Нийтийн хэсэг › бүртгэл үүсгэх формын шалгалт
+[8/18] [desktop] › tests\browser\student.spec.ts:40:7 › Сурагч › хянах самбар бодит өгөгдөлтэй
+[9/18] [desktop] › tests\browser\student.spec.ts:51:7 › Сурагч › бодогч: жишээ сонгоод бодох
+[10/18] [desktop] › tests\browser\student.spec.ts:66:7 › Сурагч › бодогч: MathLive-д гараар бичих
+[11/18] [desktop] › tests\browser\student.spec.ts:77:7 › Сурагч › бодогч: зураг оруулах → тайрах → (OCR-гүй) гараар засаж бодох
+[12/18] [desktop] › tests\browser\student.spec.ts:104:7 › Сурагч › суралцах → сэдэв → хичээл дуусгах
+[13/18] [desktop] › tests\browser\student.spec.ts:119:7 › Сурагч › түгжээтэй сэдэв нээгдэхгүй
+[14/18] [desktop] › tests\browser\student.spec.ts:124:7 › Сурагч › дасгал: хариулж тайлбар харах
+[15/18] [desktop] › tests\browser\student.spec.ts:139:7 › Сурагч › шалгалт: эхлүүлэх, хариулах, refresh, илгээх, дүн
+[16/18] [desktop] › tests\browser\student.spec.ts:167:7 › Сурагч › ахиц, хадгалсан, профайл, AI багш хуудсууд
+[17/18] [mobile] › tests\browser\mobile.spec.ts:5:7 › Гар утас › хэвтээ гүйлгээгүй, доод цэс, камерын fallback
+  1) [mobile] › tests\browser\mobile.spec.ts:5:7 › Гар утас › хэвтээ гүйлгээгүй, доод цэс, камерын fallback 
+
+    Error: /student/learn хэвтээ гүйлгээтэй
+
+    expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    292.96875
+
+      16 |       await page.goto(p);
+      17 |       const o = await page.evaluate(() => Math.max(document.documentElement.scrollWidth, ...[...document.querySelectorAll("main *")].map((e) => e.getBoundingClientRect().right)) - window.innerWidth);
+    > 18 |       expect(o, `${p} хэвтээ гүйлгээтэй`).toBeLessThanOrEqual(1);
+         |                                           ^
+      19 |     }
+      20 |     await page.goto("/student/solve?mode=camera");
+      21 |     await expect(page.getByRole("button", { name: /Камер асаах/ })).toBeVisible();
+        at C:\Users\PC\Desktop\Moms\tests\browser\mobile.spec.ts:18:43
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests\browser\.results\mobile-Гар-утас-хэвтээ-гүйлгээгүй-доод-цэс-камерын-fallback-mobile\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests\browser\.results\mobile-Гар-утас-хэвтээ-гүйлгээгүй-доод-цэс-камерын-fallback-mobile\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests\browser\.results\mobile-Гар-утас-хэвтээ-гүйлгээгүй-доод-цэс-камерын-fallback-mobile\trace.zip
+    Usage:
+
+        npx playwright show-trace tests\browser\.results\mobile-Гар-утас-хэвтээ-гүйлгээгүй-доод-цэс-камерын-fallback-mobile\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[18/18] [mobile] › tests\browser\mobile.spec.ts:30:7 › Гар утас › гар утсан дээр шалгалтын асуултын жагсаалт
+  1 failed
+    [mobile] › tests\browser\mobile.spec.ts:5:7 › Гар утас › хэвтээ гүйлгээгүй, доод цэс, камерын fallback 
+  17 passed (1.7m)
