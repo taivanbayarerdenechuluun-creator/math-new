@@ -6,6 +6,9 @@ import { Eye, EyeOff, LogIn } from "lucide-react";
 import { Alert, Button, Field, Input } from "@/components/ui/primitives";
 import { api } from "@/lib/client";
 
+// Демо бүртгэлийн товчийг зөвхөн хөгжүүлэлтэд эсвэл NEXT_PUBLIC_DEMO_LOGINS=true үед харуулна
+const SHOW_DEMO = process.env.NODE_ENV !== "production" || process.env.NEXT_PUBLIC_DEMO_LOGINS === "true";
+
 function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
@@ -63,6 +66,7 @@ function LoginForm() {
           Бүртгүүлэх
         </Link>
       </p>
+      {SHOW_DEMO && (
       <div className="mt-8 rounded-2xl border border-dashed border-border-strong p-4">
         <p className="text-xs font-semibold uppercase tracking-wide text-subtle">Туршилтын бүртгэлүүд</p>
         <div className="mt-2 flex flex-wrap gap-2">
@@ -77,6 +81,7 @@ function LoginForm() {
           ))}
         </div>
       </div>
+      )}
     </>
   );
 }

@@ -505,8 +505,10 @@ model UploadedFile {
   fileName  String
   mimeType  String
   size      Int
-  path      String   // storage доторх харьцангуй зам
+  path      String   // storage доторх харьцангуй зам (local драйвер) эсвэл "db:<id>"
   purpose   String   // SOLVER | QUESTION_IMPORT | QUESTION_IMAGE
+  // STORAGE_DRIVER=db үед файлын агуулга (Vercel зэрэг диск нь түр зуурын орчинд)
+  data      Bytes?
   createdAt DateTime @default(now())
 
   user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)

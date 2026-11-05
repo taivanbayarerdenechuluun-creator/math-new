@@ -7,7 +7,7 @@ import { deleteUpload } from "@/services/storage";
 type Ctx = { params: Promise<{ id: string }> };
 
 async function own(id: string, userId: string) {
-  const p = await db.solvedProblem.findUnique({ where: { id }, include: { imageFile: true } });
+  const p = await db.solvedProblem.findUnique({ where: { id }, include: { imageFile: { omit: { data: true } } } });
   if (!p || p.userId !== userId) throw new HttpError(404, "Бодлого олдсонгүй.");
   return p;
 }

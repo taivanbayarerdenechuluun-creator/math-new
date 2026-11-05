@@ -7,7 +7,7 @@ import { readUpload } from "@/services/storage";
 export const GET = route<{ params: Promise<{ id: string }> }>(async (_req, { params }) => {
   const user = await requireApiRole();
   const { id } = await params;
-  const file = await db.uploadedFile.findUnique({ where: { id } });
+  const file = await db.uploadedFile.findUnique({ where: { id }, omit: { data: true } });
   if (!file) throw new HttpError(404, "Файл олдсонгүй.");
   const isOwner = file.userId === user.id;
   const staffCanView = user.role !== "STUDENT" && file.purpose !== "SOLVER";

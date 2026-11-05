@@ -15,7 +15,9 @@
     "test:e2e": "node tests/e2e/run.mjs",
     "db:content": "tsx database/seed/sync-content.ts",
     "test:browser": "playwright test",
-    "test:postgres": "node tests/e2e/postgres.mjs"
+    "test:postgres": "node tests/e2e/postgres.mjs",
+    "vercel-build": "node scripts/vercel-build.mjs",
+    "postinstall": "prisma generate"
   },
   "prisma": {
     "schema": "database/schema.prisma"

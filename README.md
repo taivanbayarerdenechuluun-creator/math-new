@@ -110,7 +110,34 @@ docker compose exec app npx tsx database/seed/seed.ts  # анхны өгөгдө
 
 Хөгжүүлэлт рүү буцах: `node scripts/use-db.mjs sqlite && npx prisma generate`.
 
-Файл хадгалалт анхдагчаар локал диск (`STORAGE_DIR`, Docker-т volume). Олон instance/serverless орчинд `services/storage/index.ts`-ийн 3 функцийг Supabase Storage/S3 руу солино. Rate limiter санах ойд ажилладаг — олон instance-д Redis/Upstash ашиглана.
+Файл хадгалалт: `STORAGE_DRIVER=local` (анхдагч, `STORAGE_DIR`, Docker-т volume) эсвэл `STORAGE_DRIVER=db` (файлыг PostgreSQL-д хадгална, Vercel дээр автоматаар). Rate limiter санах ойд ажилладаг — олон instance-д Redis/Upstash ашиглана.
+
+## Vercel дээр deploy
+
+Vercel дээр SQLite ажиллахгүй (диск түр зуурын). `vercel.json` нь build-ийг `scripts/vercel-build.mjs`-ээр ажиллуулдаг. Энэ скрипт:
+- PostgreSQL руу шилжинэ
+- migration-уудыг хэрэгжүүлнэ
+- сан хоосон бол анхны агуулгыг оруулна
+
+Зургийг өгөгдлийн санд хадгална (Vercel дээр автоматаар).
+
+1. **Vercel → Project → Storage → Create Database → Neon** (эсвэл Supabase) сонгоод төсөлдөө холбоно. `DATABASE_URL` автоматаар нэмэгдэнэ.
+2. **Settings → Environment Variables** (Production + Preview):
+   - `AUTH_SECRET`: 32+ тэмдэгттэй санамсаргүй утга. Жишээ нь `node -e "console.log(require('crypto').randomBytes(48).toString('base64url'))"`
+   - `ADMIN_EMAIL`, `ADMIN_PASSWORD` (10+ тэмдэгт, үсэг ба тоо), `ADMIN_NAME`: анхны deploy-д таны админ бүртгэл үүснэ. Демо бүртгэл үүсэхгүй.
+   - Заавал биш: `ANTHROPIC_API_KEY`, `MATHPIX_APP_ID`, `MATHPIX_APP_KEY`
+3. **Deployments → Redeploy** хийнэ.
+4. `https://<таны-домэйн>/api/health` хаягаар тохиргоог шалгана. Бүх шалгалт `ok: true` байх ёстой.
+
+Тестийн сайт дээр демо бүртгэл хэрэгтэй бол `SEED_DEMO_USERS=true` болон `NEXT_PUBLIC_DEMO_LOGINS=true` нэмнэ. Нийтийн сайтад үүнийг ашиглахгүй: нууц үгнүүд нь энэ README-д бичигдсэн байгаа.
+
+Deployment Protection асаалттай бол сайтыг зөвхөн Vercel бүртгэлээр нэвтэрсэн хүн харна (Settings → Deployment Protection).
+
+Локалд дуурайж шалгах:
+```bash
+docker compose -f docker-compose.yml -f tests/docker/vercel-sim.yml up -d --build vtest
+node tests/e2e/vercel-sim-check.mjs http://localhost:3500 owner@school.mn StrongPass2026
+```
 
 ## Хөтөлбөрийн тухай
 

@@ -118,7 +118,7 @@ export async function updateQuestion(id: string, input: QuestionInput, user: Cur
     }),
   ]);
   // Лавлах зураг: OCR-ийн эх файлыг (QUESTION_IMPORT) хэзээ ч дарж бичихгүй
-  const currentFile = existing.originalFileId ? await db.uploadedFile.findUnique({ where: { id: existing.originalFileId } }) : null;
+  const currentFile = existing.originalFileId ? await db.uploadedFile.findUnique({ where: { id: existing.originalFileId }, select: { purpose: true } }) : null;
   if (currentFile?.purpose !== "QUESTION_IMPORT") {
     await db.question.update({ where: { id }, data: { originalFileId: input.originalFileId || null } });
   }

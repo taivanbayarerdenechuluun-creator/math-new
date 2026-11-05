@@ -21,7 +21,7 @@ export async function loadQuestionDraft(id: string) {
       author: { select: { name: true } },
       reviewer: { select: { name: true } },
       reviews: { include: { reviewer: { select: { name: true } } }, orderBy: { createdAt: "desc" } },
-      originalFile: true,
+      originalFile: { select: { id: true, purpose: true } },
       topic: { select: { title: true } },
       _count: { select: { examLinks: true } },
     },

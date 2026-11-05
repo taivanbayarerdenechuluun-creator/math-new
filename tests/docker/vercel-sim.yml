@@ -1,0 +1,17 @@
+services:
+  vtest:
+    build:
+      context: C:/Users/PC/Desktop/Moms
+      dockerfile: tests/docker/Dockerfile.vercel-sim
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      VERCEL: "1"
+      DATABASE_URL: postgresql://iqmath:iqmath_dev_password@db:5432/iqmath_vercel
+      AUTH_SECRET: test-secret-test-secret-test-secret-1234567
+      ADMIN_EMAIL: owner@school.mn
+      ADMIN_PASSWORD: StrongPass2026
+      ADMIN_NAME: Сургуулийн админ
+    ports:
+      - "3500:3000"

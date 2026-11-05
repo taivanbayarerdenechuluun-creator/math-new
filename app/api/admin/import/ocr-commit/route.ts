@@ -39,7 +39,7 @@ export const POST = route(async (req) => {
 
   // Файлууд тухайн хэрэглэгчийнх эсэхийг шалгах
   const fileIds = [...new Set(body.items.map((i) => i.fileId).filter(Boolean))] as string[];
-  const files = await db.uploadedFile.findMany({ where: { id: { in: fileIds } } });
+  const files = await db.uploadedFile.findMany({ where: { id: { in: fileIds } }, select: { id: true, userId: true } });
   if (files.some((f) => f.userId !== user.id)) throw new HttpError(403, "Файлд хандах эрхгүй.");
 
   const job = await db.questionImportJob.create({

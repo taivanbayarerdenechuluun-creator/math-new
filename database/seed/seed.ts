@@ -40,14 +40,32 @@ async function main() {
     return;
   }
 
+  // SEED_MODE=production: нийтийн сайтад демо бүртгэл (README-д нууц үг нь байгаа) үүсгэхгүй.
+  // Зөвхөн ADMIN_EMAIL / ADMIN_PASSWORD-оор админ үүсгэж, хөтөлбөр, бодлого, шалгалтын агуулгыг оруулна.
+  const PROD = process.env.SEED_MODE === "production";
+  if (PROD) {
+    const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+    const password = process.env.ADMIN_PASSWORD ?? "";
+    if (!email || !/^\S+@\S+\.\S+$/.test(email) || password.length < 10 || !/\d/.test(password) || !/[A-Za-z]/.test(password)) {
+      throw new Error("SEED_MODE=production үед ADMIN_EMAIL болон ADMIN_PASSWORD (10+ тэмдэгт, үсэг ба тоо) заавал тохируулна.");
+    }
+  }
+
   console.log("→ Хэрэглэгчид");
-  const [admin, teacher, teacher2, student] = await Promise.all([
+  const [admin, teacher, teacher2, student] = PROD
+    ? await (async () => {
+        const a = await db.user.create({
+          data: { email: process.env.ADMIN_EMAIL!.trim().toLowerCase(), name: process.env.ADMIN_NAME?.trim() || "Системийн админ", role: "ADMIN", passwordHash: await bcrypt.hash(process.env.ADMIN_PASSWORD!, 11), avatarColor: "indigo" },
+        });
+        return [a, a, a, null] as const;
+      })()
+    : await Promise.all([
     db.user.create({ data: { email: "admin@iqmath.mn", name: "Системийн админ", role: "ADMIN", passwordHash: await bcrypt.hash("Admin123!", 11), avatarColor: "indigo" } }),
     db.user.create({ data: { email: "teacher@iqmath.mn", name: "Б. Сарангэрэл багш", role: "TEACHER", passwordHash: await bcrypt.hash("Teacher123!", 11), avatarColor: "cyan" } }),
     db.user.create({ data: { email: "teacher2@iqmath.mn", name: "Д. Батболд багш", role: "TEACHER", passwordHash: await bcrypt.hash("Teacher123!", 11), avatarColor: "emerald" } }),
     db.user.create({ data: { email: "student@iqmath.mn", name: "Тэмүүлэн", role: "STUDENT", grade: 9, passwordHash: await bcrypt.hash("Student123!", 11), avatarColor: "violet", showOnLeaderboard: true } }),
   ]);
-  const others = await Promise.all(
+  const others = PROD ? [] : await Promise.all(
     [
       ["Номин", 9],
       ["Билгүүн", 9],
@@ -99,6 +117,7 @@ async function main() {
   let n = 1;
   for (const q of QUESTIONS) {
     const status = q.status ?? "PUBLISHED";
+    if (PROD && status !== "PUBLISHED") continue; // демо "хянах" бодлогуудыг production-д оруулахгүй
     const isReview = status === "NEEDS_REVIEW";
     const created = await db.question.create({
       data: {
@@ -165,6 +184,7 @@ async function main() {
     await db.achievement.create({ data: { code, title, description, icon, xpReward } });
   }
 
+  if (!PROD && student) {
   console.log("→ Демо сурагчийн түүх (бодит бичлэгүүд)");
   // Сүүлийн 14 өдрийн дасгалын хариултууд — 8, 9-р ангийн нийтлэгдсэн бодлогууд дээр
   const pool = QUESTIONS.filter((q) => (q.grade === 8 || q.grade === 9 || q.grade === 7) && (q.status ?? "PUBLISHED") === "PUBLISHED");
@@ -239,13 +259,14 @@ async function main() {
   for (const o of others) {
     await db.dailyActivity.create({ data: { userId: o.id, date: dayKey(today), problemsSolved: 4, correct: 3, minutes: 15, xpEarned: 32 } });
   }
+  } // !PROD
 
   console.log("→ Нэмэлт хичээл, бодлого");
   const extra = await syncContent(db);
   console.log(`  ${extra.lessons} хичээл, ${extra.questions} бодлого нэмэгдлээ`);
 
   await db.auditLog.create({ data: { userId: admin.id, action: "SEED", entity: "system", details: "Анхны өгөгдөл үүсгэв" } });
-  console.log("✔ Дууслаа.\n  admin@iqmath.mn / Admin123!\n  teacher@iqmath.mn / Teacher123!\n  student@iqmath.mn / Student123!");
+  console.log(PROD ? `✔ Дууслаа. Админ: ${admin.email}` : "✔ Дууслаа.\n  admin@iqmath.mn / Admin123!\n  teacher@iqmath.mn / Teacher123!\n  student@iqmath.mn / Student123!");
 }
 
 main()

@@ -26,7 +26,7 @@ export const POST = route(async (req) => {
 
   let image: { base64: string; mime: "image/jpeg" | "image/png" | "image/webp" } | undefined;
   if (body.imageFileId) {
-    const file = await db.uploadedFile.findUnique({ where: { id: body.imageFileId } });
+    const file = await db.uploadedFile.findUnique({ where: { id: body.imageFileId }, omit: { data: true } });
     // Зөвхөн өөрийн файлыг ашиглана
     if (!file || file.userId !== user.id) return fail(404, "Зураг олдсонгүй.");
     if (file.mimeType.startsWith("image/")) {
