@@ -41,7 +41,24 @@ console.log(`→ PostgreSQL schema${direct ? " (migration-д шууд холбо
 
 run("npx prisma generate");
 
-const migrate = run("npx prisma migrate deploy", { capture: true, allowFail: true });
+let migrate = run("npx prisma migrate deploy", { capture: true, allowFail: true });
+
+// P3009: өмнөх deploy дээр migration дундаа унасан. Алдааны логийг хэвлээд "rolled back" гэж тэмдэглэн
+// дахин хэрэгжүүлнэ (манай migration-ууд давтан ажиллуулж болохуйц бичигдсэн).
+for (let attempt = 0; !migrate.ok && migrate.out.includes("P3009") && attempt < 3; attempt++) {
+  const { PrismaClient } = await import("@prisma/client");
+  const db = new PrismaClient({ datasourceUrl: direct || url });
+  const failed = await db.$queryRawUnsafe(
+    `SELECT migration_name AS name, left(coalesce(logs, ''), 1500) AS logs FROM _prisma_migrations WHERE finished_at IS NULL AND rolled_back_at IS NULL`,
+  );
+  await db.$disconnect();
+  for (const f of failed) {
+    console.log(`\n→ Өмнө нь амжилтгүй болсон migration: ${f.name}\n  Алдааны лог:\n${f.logs}\n`);
+    run(`npx prisma migrate resolve --schema ${schemaPath} --rolled-back ${f.name}`);
+  }
+  migrate = run("npx prisma migrate deploy", { capture: true, allowFail: true });
+}
+
 if (!migrate.ok) {
   if (!migrate.out.includes("P3005")) {
     const hint = /P1001|P1002|ECONNREFUSED|ENOTFOUND/.test(migrate.out)

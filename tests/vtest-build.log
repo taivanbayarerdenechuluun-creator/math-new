@@ -1,160 +1,0 @@
- Image moms-vtest Building 
-#1 [internal] load local bake definitions
-#1 reading from stdin 521B done
-#1 DONE 0.0s
-
-#2 [internal] load build definition from Dockerfile.vercel-sim
-#2 transferring dockerfile: 597B 0.0s done
-#2 DONE 0.0s
-
-#3 [internal] load metadata for docker.io/library/node:22-bookworm-slim
-#3 DONE 3.1s
-
-#4 [internal] load .dockerignore
-#4 transferring context: 185B done
-#4 DONE 0.0s
-
-#5 [1/7] FROM docker.io/library/node:22-bookworm-slim@sha256:2f0e17f8955e766e776ae16d3ac47519ca3edf47c07e5c1423527926fdd5d568
-#5 resolve docker.io/library/node:22-bookworm-slim@sha256:2f0e17f8955e766e776ae16d3ac47519ca3edf47c07e5c1423527926fdd5d568 0.1s done
-#5 DONE 0.1s
-
-#6 [internal] load build context
-#6 transferring context: 392.70kB 0.2s done
-#6 DONE 0.2s
-
-#7 [2/7] RUN apt-get update && apt-get install -y --no-install-recommends openssl ca-certificates && rm -rf /var/lib/apt/lists/*
-#7 4.300 Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
-#7 5.076 Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
-#7 5.205 Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [34.8 kB]
-#7 6.412 Get:4 http://deb.debian.org/debian bookworm/main amd64 Packages [8790 kB]
-#7 20.48 Get:5 http://deb.debian.org/debian bookworm-updates/main amd64 Packages [6924 B]
-#7 21.05 Get:6 http://deb.debian.org/debian-security bookworm-security/main amd64 Packages [361 kB]
-#7 21.73 Fetched 9399 kB in 21s (441 kB/s)
-#7 21.73 Reading package lists...
-#7 22.57 Reading package lists...
-#7 23.31 Building dependency tree...
-#7 23.51 Reading state information...
-#7 23.73 The following additional packages will be installed:
-#7 23.73   libssl3
-#7 23.75 The following NEW packages will be installed:
-#7 23.76   ca-certificates libssl3 openssl
-#7 24.09 0 upgraded, 3 newly installed, 0 to remove and 3 not upgraded.
-#7 24.09 Need to get 3643 kB of archives.
-#7 24.09 After this operation, 8955 kB of additional disk space will be used.
-#7 24.09 Get:1 http://deb.debian.org/debian-security bookworm-security/main amd64 libssl3 amd64 3.0.22-1~deb12u2 [2040 kB]
-#7 25.49 Get:2 http://deb.debian.org/debian-security bookworm-security/main amd64 openssl amd64 3.0.22-1~deb12u2 [1442 kB]
-#7 26.01 Get:3 http://deb.debian.org/debian-security bookworm-security/main amd64 ca-certificates all 20250419~deb12u2 [161 kB]
-#7 26.27 debconf: delaying package configuration, since apt-utils is not installed
-#7 26.31 Fetched 3643 kB in 2s (1589 kB/s)
-#7 26.35 Selecting previously unselected package libssl3:amd64.
-#7 26.35 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 6096 files and directories currently installed.)
-#7 26.39 Preparing to unpack .../libssl3_3.0.22-1~deb12u2_amd64.deb ...
-#7 26.40 Unpacking libssl3:amd64 (3.0.22-1~deb12u2) ...
-#7 26.66 Selecting previously unselected package openssl.
-#7 26.66 Preparing to unpack .../openssl_3.0.22-1~deb12u2_amd64.deb ...
-#7 26.66 Unpacking openssl (3.0.22-1~deb12u2) ...
-#7 26.83 Selecting previously unselected package ca-certificates.
-#7 26.84 Preparing to unpack .../ca-certificates_20250419~deb12u2_all.deb ...
-#7 26.84 Unpacking ca-certificates (20250419~deb12u2) ...
-#7 26.91 Setting up libssl3:amd64 (3.0.22-1~deb12u2) ...
-#7 26.92 Setting up openssl (3.0.22-1~deb12u2) ...
-#7 26.94 Setting up ca-certificates (20250419~deb12u2) ...
-#7 27.04 debconf: unable to initialize frontend: Dialog
-#7 27.04 debconf: (TERM is not set, so the dialog frontend is not usable.)
-#7 27.04 debconf: falling back to frontend: Readline
-#7 27.04 debconf: unable to initialize frontend: Readline
-#7 27.04 debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC contains: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.36.0 /usr/local/share/perl/5.36.0 /usr/lib/x86_64-linux-gnu/perl5/5.36 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.36 /usr/share/perl/5.36 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 7.)
-#7 27.04 debconf: falling back to frontend: Teletype
-#7 27.65 Updating certificates in /etc/ssl/certs...
-#7 28.51 148 added, 0 removed; done.
-#7 28.57 Processing triggers for libc-bin (2.36-9+deb12u14) ...
-#7 28.63 Processing triggers for ca-certificates (20250419~deb12u2) ...
-#7 28.64 Updating certificates in /etc/ssl/certs...
-#7 29.28 0 added, 0 removed; done.
-#7 29.28 Running hooks in /etc/ca-certificates/update.d...
-#7 29.31 done.
-#7 DONE 29.4s
-
-#8 [3/7] WORKDIR /app
-#8 DONE 0.1s
-
-#9 [4/7] COPY package.json package-lock.json ./
-#9 DONE 0.1s
-
-#10 [5/7] COPY database/schema.prisma database/schema.prisma
-#10 DONE 0.1s
-
-#11 [6/7] RUN npm ci
-#11 24.45 npm warn deprecated recharts@2.15.4: 1.x and 2.x branches are no longer active. Bump to Recharts v3 to receive latest features and bugfixes. See https://github.com/recharts/recharts/wiki/3.0-migration-guide
-#11 72.77 
-#11 72.77 > iq-math@0.1.0 postinstall
-#11 72.77 > prisma generate
-#11 72.77 
-#11 74.11 warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
-#11 74.11 For more information, see: https://pris.ly/prisma-config
-#11 74.11 
-#11 74.41 Prisma schema loaded from database/schema.prisma
-#11 75.16 ┌─────────────────────────────────────────────────────────┐
-#11 75.16 │  Update available 6.19.3 -> 8.0.0-rc.30                 │
-#11 75.16 │                                                         │
-#11 75.16 │  This is a major update - please follow the guide at    │
-#11 75.16 │  https://pris.ly/d/major-version-upgrade                │
-#11 75.16 │                                                         │
-#11 75.16 │  Run the following to update                            │
-#11 75.16 │    npm i --save-dev prisma@latest                       │
-#11 75.16 │    npm i @prisma/client@latest                          │
-#11 75.16 └─────────────────────────────────────────────────────────┘
-#11 75.16 
-#11 75.16 ✔ Generated Prisma Client (v6.19.3) to ./node_modules/@prisma/client in 341ms
-#11 75.16 
-#11 75.16 Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
-#11 75.16 
-#11 75.16 Tip: Interested in query caching in just a few lines of code? Try Accelerate today! https://pris.ly/tip-3-accelerate
-#11 75.16 
-#11 75.18 
-#11 75.18 added 219 packages, and audited 226 packages in 1m
-#11 75.18 
-#11 75.18 39 packages are looking for funding
-#11 75.18   run `npm fund` for details
-#11 75.37 
-#11 75.37 12 vulnerabilities (1 low, 2 moderate, 7 high, 2 critical)
-#11 75.37 
-#11 75.37 To address all issues possible (including breaking changes), run:
-#11 75.37   npm audit fix --force
-#11 75.37 
-#11 75.37 Some issues need review, and may require choosing
-#11 75.37 a different dependency.
-#11 75.37 
-#11 75.37 Run `npm audit` for details.
-#11 75.37 npm notice
-#11 75.37 npm notice New major version of npm available! 10.9.9 -> 12.2.2
-#11 75.37 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
-#11 75.37 npm notice To update run: npm install -g npm@12.2.2
-#11 75.37 npm notice
-#11 DONE 75.8s
-
-#12 [7/7] COPY . .
-#12 DONE 0.6s
-
-#13 exporting to image
-#13 exporting layers
-#13 exporting layers 57.0s done
-#13 exporting manifest sha256:af29b4499e9a30f179151ed85b050f395f611b0e78831b576591e29a05b04350 0.0s done
-#13 exporting config sha256:78bef26294bd128c66dd3013518fb42e64728dcf04e879d036afe21fa4a692ea 0.0s done
-#13 exporting attestation manifest sha256:9e606f0dc33d3b059c886aa6a866c20baa9e9d00733e09fdb19f109763b7c834 0.0s done
-#13 exporting manifest list sha256:69fc713cbac8aa26c05930923feb646c3a420b0deb78c60def135b21acf4ce9d 0.0s done
-#13 naming to docker.io/library/moms-vtest:latest done
-#13 unpacking to docker.io/library/moms-vtest:latest
-#13 unpacking to docker.io/library/moms-vtest:latest 15.9s done
-#13 DONE 73.0s
-
-#14 resolving provenance for metadata file
-#14 DONE 0.0s
- Image moms-vtest Built 
- Container moms-db-1 Running 
- Container moms-vtest-1 Creating 
- Container moms-vtest-1 Created 
- Container moms-db-1 Waiting 
- Container moms-db-1 Healthy 
- Container moms-vtest-1 Starting 
- Container moms-vtest-1 Started 
